@@ -1,18 +1,26 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Map, Users, Dice6 } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { BookOpen, Map, Users, Dice6 } from "lucide-react";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
-      {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="container mx-auto text-center">
-          <h1 className="text-5xl font-bold text-white mb-6">Campaign Chronicles</h1>
+          <h1 className="text-5xl font-bold text-white mb-6">
+            Campaign Chronicles
+          </h1>
           <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
-            Your ultimate toolkit for managing TTRPG campaigns. Create immersive stories, design interactive world maps,
-            and chronicle your adventures.
+            Your ultimate toolkit for managing TTRPG campaigns. Create immersive
+            stories, design interactive world maps, and chronicle your
+            adventures.
           </p>
           <div className="flex gap-4 justify-center">
             <Button asChild size="lg">
@@ -25,10 +33,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Grid */}
       <section className="py-16 px-4">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-12">Campaign Management Tools</h2>
+          <h2 className="text-3xl font-bold text-white text-center mb-12">
+            Campaign Management Tools
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
@@ -93,5 +102,5 @@ export default function HomePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
