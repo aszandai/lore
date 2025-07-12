@@ -1,0 +1,7 @@
+{
+  "name": "Campaign Lore",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "frontend",
+  "workspaceFolder": "/workspaces/lore",
+  "shutdownAction": "stopCompose"
+}
