@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  workspace:
+    image: mcr.microsoft.com/vscode/devcontainers/base:alpine-3.21
+    container_name: workspace
+    volumes:
+      - .:/workspaces/lore
+    depends_on:
+      - backend
+      - frontend
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    command: sleep infinity

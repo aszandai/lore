@@ -12,7 +12,11 @@ import {
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window === "undefined"
+    ? "http://backend:5000"
+    : "http://localhost:5000");
 
 export default function CreateMapPage({
   onMapCreated,
@@ -38,15 +42,17 @@ export default function CreateMapPage({
   const handleCreateMap = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.imageFile) return;
-    const mapPayload = {
-      name: formData.name,
-      description: formData.description,
-    };
+
+    const form = new FormData();
+    form.append("name", formData.name);
+    form.append("description", formData.description);
+    form.append("image", formData.imageFile);
+
     const response = await fetch(`${API_URL}/maps`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(mapPayload),
+      body: form,
     });
+
     if (response.ok) {
       onMapCreated();
       setFormData({ name: "", description: "", imageFile: null });

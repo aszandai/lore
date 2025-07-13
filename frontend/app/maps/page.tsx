@@ -40,7 +40,7 @@ export default function MapsPage() {
   if (view === "detail" && selectedMap) {
     return <MapDetailPage map={selectedMap} onBack={handleBackToMaps} />;
   }
-  // Default: landing page
+
   return (
     <MapLandingPage
       onSelectMap={handleSelectMap}

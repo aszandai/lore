@@ -38,7 +38,7 @@ const characterTypes = {
   neutral: { label: "Neutral", icon: Crown, color: "bg-yellow-500" },
 };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 export default function CharactersLandingPage({
   onCreate,

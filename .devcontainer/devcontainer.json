@@ -1,7 +1,22 @@
 {
   "name": "Campaign Lore",
-  "dockerComposeFile": ["../docker-compose.yml"],
-  "service": "frontend",
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "../docker-compose.workspace.yml"
+  ],
+  "service": "workspace",
   "workspaceFolder": "/workspaces/lore",
-  "shutdownAction": "stopCompose"
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot",
+        "GitHub.copilot-chat",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  }
 }

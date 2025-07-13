@@ -29,7 +29,13 @@ export interface WorldMap {
   createdAt: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const getImageUrl = (map: WorldMap & { image_url?: string }) => {
+  const url = map.image_url ?? map.imageUrl;
+  if (!url) return "/placeholder.svg";
+  if (url.startsWith("http")) return url;
+  return `${API_URL}${url}`;
+};
 
 export default function MapLandingPage({
   onSelectMap,
@@ -52,7 +58,10 @@ export default function MapLandingPage({
   }, []);
 
   const saveMaps = (newMaps: WorldMap[]) => {
-    setMaps(newMaps);
+    const validMaps = (newMaps || [])
+      .filter((map) => map && typeof map === "object")
+      .map((map: any) => ({ ...map, regions: map.regions || [] }));
+    setMaps(validMaps);
   };
 
   const handleDeleteMap = async (id: string) => {
@@ -79,7 +88,7 @@ export default function MapLandingPage({
           </Button>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {maps.length === 0 ? (
+          {maps?.length === 0 ? (
             <Card className="col-span-full">
               <CardContent className="text-center py-12">
                 <p className="text-slate-500 text-lg">No world maps yet.</p>
@@ -96,7 +105,7 @@ export default function MapLandingPage({
               >
                 <div className="aspect-video relative overflow-hidden rounded-t-lg">
                   <img
-                    src={map.imageUrl || "/placeholder.svg"}
+                    src={getImageUrl(map)}
                     alt={map.name}
                     className="w-full h-full object-cover"
                   />

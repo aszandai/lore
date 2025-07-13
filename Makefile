@@ -2,20 +2,22 @@
 
 .PHONY: dev backend frontend db_login
 
-# Start both frontend and backend in parallel
+build:
+	docker compose build
 
-dev:
-	npm install --no-save concurrently
-	./node_modules/.bin/concurrently "make backend" "make frontend"
-
-# Start backend only (dotenv loads .env automatically)
+# Start backend only
 backend:
-	cd backend && npm start
+	docker compose up --build backend
 
 # Start frontend only
 frontend:
-	cd frontend && npm run dev
+	docker compose up --build frontend
 
 # Example DB login: make db_login user=your_username
+# Connect to the running postgres container
+# Usage: make db_login user=your_username db=loredb
+# Defaults to 'postgres' user and 'loredb' db if not provided
+user?=postgres
+db?=loredb
 db_login:
-	psql -U $(user) -d loredb
+	docker exec -it postgres psql -U $(user) -d $(db)

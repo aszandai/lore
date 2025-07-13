@@ -1,8 +1,14 @@
-# Backend Dockerfile
-FROM node:20-alpine
+FROM  node:20-alpine3.17
+
 WORKDIR /app
-COPY package.json ./
+
+COPY package.json package-lock.json* ./
 RUN npm install
+
+RUN mkdir -p uploads
+
 COPY . .
+
 EXPOSE 5000
-CMD ["npm", "start"]
+
+CMD ["npx", "nodemon", "index.js"]
