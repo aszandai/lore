@@ -1,33 +1,14 @@
 "use client";
-
 import { useState } from "react";
 import MapLandingPage from "./MapLandingPage";
 import CreateMapPage from "./CreateMapPage";
-import MapDetailPage from "./MapDetailPage";
-
-import type { WorldMap } from "./MapLandingPage";
 
 export default function MapsPage() {
-  const [view, setView] = useState<"landing" | "create" | "detail">("landing");
-  const [selectedMap, setSelectedMap] = useState<WorldMap | null>(null);
+  const [view, setView] = useState<"landing" | "create">("landing");
 
-  const handleSelectMap = (map: WorldMap) => {
-    setSelectedMap(map);
-    setView("detail");
-  };
-
-  const handleCreateMap = () => {
-    setView("create");
-  };
-
-  const handleMapCreated = () => {
-    setView("landing");
-  };
-
-  const handleBackToMaps = () => {
-    setSelectedMap(null);
-    setView("landing");
-  };
+  const handleCreateMap = () => setView("create");
+  const handleMapCreated = () => setView("landing");
+  const handleBackToMaps = () => setView("landing");
 
   if (view === "create") {
     return (
@@ -37,14 +18,6 @@ export default function MapsPage() {
       />
     );
   }
-  if (view === "detail" && selectedMap) {
-    return <MapDetailPage map={selectedMap} onBack={handleBackToMaps} />;
-  }
 
-  return (
-    <MapLandingPage
-      onSelectMap={handleSelectMap}
-      onCreateMap={handleCreateMap}
-    />
-  );
+  return <MapLandingPage onCreateMap={handleCreateMap} />;
 }

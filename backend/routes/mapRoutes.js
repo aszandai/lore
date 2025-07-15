@@ -45,6 +45,30 @@ export default (pool) => {
     }
   });
 
+  router.get("/maps/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const mapResult = await pool.query(
+        "SELECT * FROM world_maps WHERE id = $1",
+        [id]
+      );
+
+      if (!mapResult.rows.length) {
+        return res.status(404).json({ error: "Map not found" });
+      }
+      const map = mapResult.rows[0];
+      const regionsResult = await pool.query(
+        "SELECT * FROM map_regions WHERE world_map_id = $1",
+        [id]
+      );
+      map.regions = regionsResult.rows || [];
+
+      res.json(map);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   router.put("/maps/:id", async (req, res) => {
     try {
       const { id } = req.params;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "../../components/ui/button";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
 } from "../../components/ui/card";
 import { Badge } from "../../components/ui/badge";
 import { Upload, Eye, Trash2 } from "lucide-react";
+import { getApiUrl } from "@/utils/getApiUrl";
 
 export interface MapRegion {
   id: string;
@@ -29,7 +31,7 @@ export interface WorldMap {
   createdAt: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = getApiUrl();
 const getImageUrl = (map: WorldMap & { image_url?: string }) => {
   const url = map.image_url ?? map.imageUrl;
   if (!url) return "/placeholder.svg";
@@ -38,23 +40,17 @@ const getImageUrl = (map: WorldMap & { image_url?: string }) => {
 };
 
 export default function MapLandingPage({
-  onSelectMap,
   onCreateMap,
 }: {
-  onSelectMap: (map: WorldMap) => void;
   onCreateMap: () => void;
 }) {
   const [maps, setMaps] = useState<WorldMap[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     fetch(`${API_URL}/maps`)
       .then((res) => res.json())
-      .then((data) =>
-        setMaps(
-          data.map((map: any) => ({ ...map, regions: map.regions || [] }))
-        )
-      )
-      .catch(() => setMaps([]));
+      .then((data) => setMaps(data));
   }, []);
 
   const saveMaps = (newMaps: WorldMap[]) => {
@@ -111,7 +107,7 @@ export default function MapLandingPage({
                   />
                   <div className="absolute top-2 right-2">
                     <Badge variant="secondary">
-                      {map.regions.length || 0} regions
+                      {map.regions?.length || 0} regions
                     </Badge>
                   </div>
                 </div>
@@ -123,7 +119,7 @@ export default function MapLandingPage({
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      onClick={() => onSelectMap(map)}
+                      onClick={() => router.push(`/maps/${map.id}`)}
                       className="flex-1"
                     >
                       <Eye className="h-4 w-4 mr-2" />

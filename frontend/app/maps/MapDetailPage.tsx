@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "../../components/ui/button";
 import {
   Card,
@@ -12,6 +13,7 @@ import {
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
 import { Save, Plus, Trash2 } from "lucide-react";
+import { getApiUrl } from "@/utils/getApiUrl";
 
 interface MapRegion {
   id: string;
@@ -30,21 +32,14 @@ interface WorldMap {
   createdAt: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL = getApiUrl();
 const getImageUrl = (map: WorldMap & { image_url?: string }) => {
   const url = map.image_url ?? map.imageUrl;
   if (!url) return "/placeholder.svg";
-  if (url.startsWith("http")) return url;
-  return `${API_URL}${url}`;
+  return url.startsWith("http") ? url : `${API_URL}${url}`;
 };
 
-export default function MapDetailPage({
-  map,
-  onBack,
-}: {
-  map: WorldMap;
-  onBack: () => void;
-}) {
+export default function MapDetailPage({ map }: { map: WorldMap }) {
   const [selectedMap, setSelectedMap] = useState<WorldMap>(map);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [drawingMode, setDrawingMode] = useState(false);
@@ -55,6 +50,7 @@ export default function MapDetailPage({
     color: "#3b82f6",
   });
   const svgRef = useRef<SVGSVGElement>(null);
+  const router = useRouter();
 
   const handleSVGClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!drawingMode || !svgRef.current) return;
@@ -128,7 +124,7 @@ export default function MapDetailPage({
                 </Button>
               </div>
             )}
-            <Button variant="outline" onClick={onBack}>
+            <Button variant="outline" onClick={() => router.push("/maps")}>
               Back to Maps
             </Button>
           </div>
@@ -188,22 +184,24 @@ export default function MapDetailPage({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Input
-                  placeholder="Region name"
-                  value={newRegion.name}
-                  onChange={(e) =>
-                    setNewRegion({ ...newRegion, name: e.target.value })
-                  }
-                  className="w-32"
-                />
-                <input
-                  type="color"
-                  value={newRegion.color}
-                  onChange={(e) =>
-                    setNewRegion({ ...newRegion, color: e.target.value })
-                  }
-                  className="w-12 h-10 rounded border"
-                />
+                <div className="flex gap-2 items-right">
+                  <Input
+                    placeholder="Region name"
+                    value={newRegion.name}
+                    onChange={(e) =>
+                      setNewRegion({ ...newRegion, name: e.target.value })
+                    }
+                    className="w-32"
+                  />
+                  <input
+                    type="color"
+                    value={newRegion.color}
+                    onChange={(e) =>
+                      setNewRegion({ ...newRegion, color: e.target.value })
+                    }
+                    className="w-12 h-10 rounded border"
+                  />
+                </div>
                 <Textarea
                   placeholder="Region description"
                   value={newRegion.description}
