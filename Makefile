@@ -21,3 +21,14 @@ user?=postgres
 db?=loredb
 db_login:
 	docker exec -it postgres psql -U $(user) -d $(db)
+
+# Backup the database
+db_backup:
+	docker compose exec postgres sh -c 'mkdir -p /tmp/backup && pg_dump -U $$DB_USER $$DB_HOST > /tmp/backup/backup-$$(date +%Y%m%d%H%M).sql'
+
+# Restore the database
+db_restore:
+	docker compose exec -T postgres sh -c 'psql -U $$DB_USER $$DB_HOST < /tmp/backup/$(FILE)'
+
+db_ls:
+	docker compose exec postgres ls /tmp/backup
