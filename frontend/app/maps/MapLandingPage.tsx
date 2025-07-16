@@ -31,12 +31,8 @@ export interface WorldMap {
   createdAt: string;
 }
 
-const API_URL = getApiUrl();
 const getImageUrl = (map: WorldMap & { image_url?: string }) => {
-  const url = map.image_url ?? map.imageUrl;
-  if (!url) return "/placeholder.svg";
-  if (url.startsWith("http")) return url;
-  return `${API_URL}${url}`;
+  return getApiUrl(map.image_url ?? map.imageUrl) ?? "/placeholder.svg";
 };
 
 export default function MapLandingPage({
@@ -48,7 +44,7 @@ export default function MapLandingPage({
   const router = useRouter();
 
   useEffect(() => {
-    fetch(`${API_URL}/maps`)
+    fetch(getApiUrl("/maps"))
       .then((res) => res.json())
       .then((data) => setMaps(data));
   }, []);
@@ -61,8 +57,8 @@ export default function MapLandingPage({
   };
 
   const handleDeleteMap = async (id: string) => {
-    await fetch(`${API_URL}/maps/${id}`, { method: "DELETE" });
-    const updatedMaps = await fetch(`${API_URL}/maps`).then((res) =>
+    await fetch(getApiUrl(`/maps/${id}`), { method: "DELETE" });
+    const updatedMaps = await fetch(getApiUrl("/maps")).then((res) =>
       res.json()
     );
     saveMaps(updatedMaps);

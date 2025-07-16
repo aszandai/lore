@@ -32,11 +32,8 @@ interface WorldMap {
   createdAt: string;
 }
 
-const API_URL = getApiUrl();
 const getImageUrl = (map: WorldMap & { image_url?: string }) => {
-  const url = map.image_url ?? map.imageUrl;
-  if (!url) return "/placeholder.svg";
-  return url.startsWith("http") ? url : `${API_URL}${url}`;
+  return getApiUrl(map.image_url ?? map.imageUrl) ?? "/placeholder.svg";
 };
 
 export default function MapDetailPage({ map }: { map: WorldMap }) {

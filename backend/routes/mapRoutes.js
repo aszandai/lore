@@ -7,7 +7,7 @@ const router = express.Router();
 // Set up multer for local uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(process.cwd(), "backend", "uploads"));
+    cb(null, path.join(process.cwd(), "uploads"));
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);

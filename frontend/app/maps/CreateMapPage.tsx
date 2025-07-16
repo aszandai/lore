@@ -11,12 +11,7 @@ import {
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
-
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window === "undefined"
-    ? "http://backend:5000"
-    : "http://localhost:5000");
+import { getApiUrl } from "@/utils/getApiUrl";
 
 export default function CreateMapPage({
   onMapCreated,
@@ -48,7 +43,7 @@ export default function CreateMapPage({
     form.append("description", formData.description);
     form.append("image", formData.imageFile);
 
-    const response = await fetch(`${API_URL}/maps`, {
+    const response = await fetch(getApiUrl("/maps"), {
       method: "POST",
       body: form,
     });
