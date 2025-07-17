@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../../components/ui/button";
 import {
@@ -37,6 +37,7 @@ const getImageUrl = (map: WorldMap & { image_url?: string }) => {
 };
 
 export default function MapDetailPage({ map }: { map: WorldMap }) {
+  const [isClient, setIsClient] = useState(false);
   const [selectedMap, setSelectedMap] = useState<WorldMap>(map);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [drawingMode, setDrawingMode] = useState(false);
@@ -46,6 +47,11 @@ export default function MapDetailPage({ map }: { map: WorldMap }) {
     description: "",
     color: "#3b82f6",
   });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const svgRef = useRef<SVGSVGElement>(null);
   const router = useRouter();
 
@@ -130,11 +136,13 @@ export default function MapDetailPage({ map }: { map: WorldMap }) {
       <div className="flex">
         <div className="flex-1 p-4">
           <div className="relative inline-block">
-            <img
-              src={getImageUrl(selectedMap)}
-              alt={selectedMap.name}
-              className="max-w-full h-auto border rounded-lg shadow-lg"
-            />
+            {isClient && (
+              <img
+                src={getImageUrl(selectedMap)}
+                alt={selectedMap.name}
+                className="max-w-full h-auto border rounded-lg shadow-lg"
+              />
+            )}
             <svg
               ref={svgRef}
               className="absolute top-0 left-0 w-full h-full cursor-crosshair"
