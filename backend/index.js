@@ -17,8 +17,6 @@ const pool = new Pool({
 const app = express();
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
-app.use(express.json());
-
 // Serve static files from uploads directory with CORS headers
 app.use(
   "/backend/uploads",

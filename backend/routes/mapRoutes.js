@@ -71,10 +71,11 @@ export default (pool) => {
 
   router.put("/maps/:id", async (req, res) => {
     try {
-      const { name, description } = req.body;
+      const { id } = req.params;
+      const { name, description, imageUrl } = req.body;
       const result = await pool.query(
-        "UPDATE world_maps SET name = $1, description = $2 WHERE id = $3 RETURNING *",
-        [name, description, req.params.id]
+        "UPDATE world_maps SET name = $1, description = $2, image_url = $3 WHERE id = $4 RETURNING *",
+        [name, description, imageUrl, id]
       );
       res.json(result.rows[0]);
     } catch (err) {
