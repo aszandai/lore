@@ -5,9 +5,9 @@ import type { WorldMap } from "../MapLandingPage";
 export default async function MapDetail({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
+  const { id } = await params;
 
   try {
     const res = await fetch(getApiUrl(`/maps/${id}`), {
